@@ -1,239 +1,34 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    
-    <title>Gabes Password Generator</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <H1>Password Generator</H1>
-    <div class="container-fluid" >
-      <!-- first row contains the list of input
-      using a gird to ensure that they line up nicely -->
-      <div class="row">
-        <!-- 6 row to take half the scree -->
-        <div class="col-sm-6 side-section">
-          <!-- start input section -->
-          <div id="container-fluid">
-            <div class="row">
-              <div class="col-sm-12 text-align center">
-                <h4>Specify Criteria</h4>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                Min length:
-              </div>
-              <div class="col-sm-4 userinput">
-                <input type="number" id="minLength" name="minLength" size=6 required> </input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                Max length:
-              </div>
-              <div class="col-sm-4 userinput">
-                <input type="number" id="maxLength" name="maxLength"  required> </input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                  Include Special Characters?
-              </div>
-              <div class="col-sm-1 userinput">
-                <input class="div-check-input" type="checkbox" value="" id="specialChars">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                Include Numeric Characters?
-              </div>
-              <div class="col-sm-1 userinput">
-                <input class="div-check-input" type="checkbox" value="" id="numericChars">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                Include Lower Case?
-              </div>
-              <div class="col-sm-1 userinput">
-                <input class="div-check-input" type="checkbox" value="" id="lowerCase">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-8 text-align criteria">
-                Include Upper Case?
-              </div>
-              <div class="col-sm-1 userinput">
-                <input class="div-check-input" type="checkbox" value="" id="upperCase">
-              </div>
-            </div>
-          </div>
-            <div class="row">
-              <div class="col-sm-12 text-align center">
-                <button onclick="passwordGenerator()" class="center btn btn-secondary ">Generate Password</button>
-              </div>
-            </div>
+    <div class="wrapper">
+      <header>
+        <h1>Password Generator</h1>
+      </header>
+      <div class="card">
+        <div class="card-header">
+          <h2>Generate a Password</h2>
         </div>
-        <!-- right side of screen for output -->
-        <div class="col-sm-6 side-section">
-          <div class="row">
-            <div class="col-sm-12">
-              <h4 id="output-title"> Generated Password </h4>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <p id="output"></p>
-            </div>
-          </div>
-          <!-- <div class="row"> -->
-            <!-- <div class="col-sm-12 text-align center"> -->
-              <!-- <button onclick="copyPassword()" class="center btn btn-secondary" id="copy">Copy to Clipboard</button> -->
-            <!-- </div> -->
-          <!-- </div> -->
+        <div class="card-body">
+          <textarea
+            readonly
+            id="password"
+            placeholder="Your Secure Password"
+            aria-label="Generated Password"
+          ></textarea>
+        </div>
+        <div class="card-footer">
+          <button id="generate" class="btn">Generate Password</button>
         </div>
       </div>
     </div>
-
-    <!-- should be moved to js file -->
-    <script type="text/javascript">
-
-    function passwordGenerator() {
-      // set testing flag
-      var testing = true;
-
-      // grab output fields
-      let outputTitleDOM = document.getElementById('output-title');  
-      let outputDOM = document.getElementById('output');  
-
-      // get user values for lengths and convert user entered string to a number
-      const minLengthNumDOM = Number(document.getElementById('minLength').value);  
-      const maxLengthNumDOM = Number(document.getElementById('maxLength').value);  
-
-      //clear previous content if this is not the first run
-      outputDOM.textContent = "";
-
-      // outputButton
-
-      //get boolean check box values 
-      const specialCharsBoolDOM = document.getElementById('specialChars').checked;  
-      const numericCharsBoolDOM = document.getElementById('numericChars').checked;  
-      const lowerCaseBoolDOM = document.getElementById('lowerCase').checked;  
-      const upperCaseBoolDOM = document.getElementById('upperCase').checked;  
-
- 
-      if (testing) {
-        console.log("min " + minLengthNumDOM + " ofType " + typeof minLengthNumDOM);
-        console.log("max " + maxLengthNumDOM);
-        console.log("spec " + specialCharsBoolDOM);
-        console.log("num " + numericCharsBoolDOM);
-        console.log("low " + lowerCaseBoolDOM);
-        console.log("up " + upperCaseBoolDOM);
-        console.log("output title " + outputTitleDOM );
-      }
-
-      // initialize inputErrors array to hold list of error objects
-      // TODO errors are too complicated, just store and error string not an object
-      let inputErrors = []; 
-
-      // checks to ensure that min legth requirement is meet
-      if ( isNaN(minLengthNumDOM) || minLengthNumDOM < 8 ) {
-        if ( testing ) { console.log("Found error with min length"); }
-
-        // add error object to the error array
-        inputErrors.push({ field: "minimum length", userInput: minLengthNumDOM, requirement: " it must be greater than 8 characters." });
-      }
-
-      // checks to ensure that max length requirement is not exceeded
-      if ( (maxLengthNumDOM === 0) || maxLengthNumDOM > 126 ) {
-        if ( testing ) { console.log("Found error with max length"); }
-
-        // add error object to the error array
-        inputErrors.push({ field: "maximum length", userInput: maxLengthNumDOM, requirement: " it must be less than 126 characters." });
-      }
-
-      // checks to ensure that min length is not bigger then max length
-      if ( minLengthNumDOM > maxLengthNumDOM ) {
-        if ( testing ) { console.log("Found error with length"); }
-
-        // add error object to the error array
-        inputErrors.push({ field: "min length", userInput: minLengthNumDOM, requirement: " it must be less then max length." });
-      }
-
-      // checks to see that at least one character class has been selected
-      if ( ! (specialCharsBoolDOM || numericCharsBoolDOM || lowerCaseBoolDOM || upperCaseBoolDOM) ) {
-        if ( testing ) { console.log("Found error with char class"); }
-
-        // add error object to the error array
-        inputErrors.push({ field: "a character Class", userInput: "nothing", requirement: " you must select at least one character class" });
-      }
-
-      // report error output if inputError object contains errors else generate passord
-      if ( Object.keys(inputErrors).length !== 0 ) {
-        if ( testing ) { console.log("Found errors") }
-
-        // reset outputTitle "password generated" on page to incate error
-        outputTitleDOM.innerHTML = "<h4 class=\"error\"> Invalid Criteria Specified</h4>";
-
-        //interate through inputErrors array to generate errors
-        for ( i=0; i<Object.keys(inputErrors).length; i++) {
-          // GOTCHA - allows for HTML injection, but since we are not really doing anything - should be safe since input fields are numbers?
-          outputDOM.innerHTML +=  "You specified " + inputErrors[i].userInput + " for " + inputErrors[i].field + inputErrors[i].requirement + "<br><br>";
-        }
-      } else {
-        if ( testing ) { console.log("Time to generate password!"); }
-
-        // reset outputTitle "password generated" on page to incate password
-        outputTitleDOM.innerHTML = "<h4>Generated Password</h4>";
-
-        let possibleChars = '';
-
-        if ( specialCharsBoolDOM ) { possibleChars += "!@#$%^&*()-_+="; }
-        if ( numericCharsBoolDOM ) { possibleChars += "1234567890"; }
-        if ( lowerCaseBoolDOM )    { possibleChars += "abcdefghijklmnopqrstuvwxyz"; }
-        if ( upperCaseBoolDOM )    { possibleChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
-
-        let passwdLength = 0; 
-        // check for max min legth being the same
-        if (maxLengthNumDOM === minLengthNumDOM) {
-          if ( testing ) { console.log("Length is the same"); }
-          passwdLength = minLengthNumDOM;
-        } else {
-          // randomly determine length of password
-          if ( testing ) console.log("possible length" + (maxLengthNumDOM - minLengthNumDOM));
-
-          // min plus random value of differance to length  adding one so that the delta from minlegth can be 0 - diff
-          passwdLength = Math.floor(Math.random() * (maxLengthNumDOM - minLengthNumDOM + 1)) + minLengthNumDOM;
-        }
-
-        if ( testing ) { 
-          console.log("set length to " + passwdLength); }
-
-        let newPassword = '';
-        // loop for length of password. 
-        for (var i=0; i < passwdLength; i++) {
-          // use floor to get 0 through so that it can be used as index
-          // concate new random char to newPassword string
-          newPassword += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length));
-        }
-        // TODO figure out how to justify text will look better
-        outputDOM.textContent = newPassword;
-      }
-    }
-
-    //  function copyPassword() {
-      //  let outputDOM = document.getElementById('output');  
-      //  TODO select does not seem like a valid method?
-      //  outputDOM.textContent.select();
-      //  document.execCommand("copy");
-    //  }
-
-    //  document.querySelector("#copy").addEventListener("click", copy);
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
